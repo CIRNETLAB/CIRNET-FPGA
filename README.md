@@ -1,6 +1,6 @@
 # net-Circuit-FPGA
 
-Independent Lab-First FPGA source/scaffold **0.1.0**. The portable controller,
+Independent Lab-First FPGA source/scaffold **0.1.1**. The portable controller,
 disabled future instrument interface retain their Remote source bytes. The
 original testbench retains every assertion and holds reset through one clock
 edge before release, correcting simulator-dependent declaration initialization.
@@ -13,7 +13,7 @@ implementation. Pinout, Quartus synthesis/timing and electrical measurements
 remain **TBD_BY_HARDWARE_DESIGN**. Software/RTL results cannot close OPEN-ABI,
 OPEN-FRESHNESS or OPEN-HARDWARE.
 
-Version domains are independent: Contracts **1.0.1**, logical control
+Version domains are independent: Contracts **0.1.1**, logical control
 **1.0-scaffold**, reserved register map **1.0-reserved**, physical firmware and
 protocol **UNAVAILABLE**. B12 is explicitly resolved: Contracts' preserved
 unavailable design-target example says `2.0-scaffold`; that illustrative label
@@ -49,7 +49,7 @@ supplemental testbenches must emit their PASS markers. Immediate drive inhibit
 and synchronous FAULT/routing cleanup are distinct abstract simulation checks.
 
 Build with `python -B scripts/build_source.py --output
-ABSOLUTE_OWNED_SESSION/netcircuit-fpga-scaffold-0.1.0.tar.gz --provenance
+ABSOLUTE_OWNED_SESSION/netcircuit-fpga-scaffold-0.1.1.tar.gz --provenance
 ABSOLUTE_SOURCE_PROVENANCE_JSON`. The source archive has deterministic metadata,
 an exact file/SHA256 inventory and `fpga-artifact.json` at its root. Source
 fingerprint is SHA256 of sorted `sha256  path` LF lines; identity excludes itself

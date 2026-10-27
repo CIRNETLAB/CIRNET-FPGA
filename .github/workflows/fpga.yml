@@ -51,9 +51,9 @@ jobs:
           python -B -m pytest -q --basetemp "$NETCIRCUIT_ARTIFACTS_SESSION/pytest" --junitxml "$NETCIRCUIT_ARTIFACTS_SESSION/results.xml"
       - name: Build exact source artifact twice
         run: |
-          python -B scripts/build_source.py --output "$NETCIRCUIT_ARTIFACTS_SESSION/netcircuit-fpga-scaffold-0.1.0.tar.gz" --provenance integration/source-provenance.json
+          python -B scripts/build_source.py --output "$NETCIRCUIT_ARTIFACTS_SESSION/netcircuit-fpga-scaffold-0.1.1.tar.gz" --provenance integration/source-provenance.json
           python -B scripts/build_source.py --output "$NETCIRCUIT_ARTIFACTS_SESSION/rebuilt.tar.gz" --provenance integration/source-provenance.json
-          cmp "$NETCIRCUIT_ARTIFACTS_SESSION/netcircuit-fpga-scaffold-0.1.0.tar.gz" "$NETCIRCUIT_ARTIFACTS_SESSION/rebuilt.tar.gz"
+          cmp "$NETCIRCUIT_ARTIFACTS_SESSION/netcircuit-fpga-scaffold-0.1.1.tar.gz" "$NETCIRCUIT_ARTIFACTS_SESSION/rebuilt.tar.gz"
       - uses: actions/upload-artifact@v4
         if: always() && env.NETCIRCUIT_ARTIFACTS_SESSION != ''
         with:

@@ -60,5 +60,5 @@ def test_actual_rtl_compilation_and_original_and_supplemental_behavior():
                           capture_output=True,text=True,timeout=180)
     assert result.returncode==0,result.stdout+result.stderr
     value=json.loads(result.stdout)
-    assert value['pyslang']=='12.0.0' and value['contracts']['version']=='1.0.1'
+    assert value['pyslang']=='12.0.0' and value['contracts']['version']=='0.1.1'
     assert [x['marker'] for x in value['results']]==['LAB_FIRST_RTL_PASS','PERMIT_MATRIX_RTL_PASS']

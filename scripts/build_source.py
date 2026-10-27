@@ -71,11 +71,11 @@ def build(output,provenance,root=ROOT):
     if not isinstance(source.get('uncommittedMigration'),bool):
         raise ValueError('Explicit uncommittedMigration provenance is required.')
     payload=source_files(Path(root))
-    if payload['VERSION'].decode().strip()!='0.1.0':
+    if payload['VERSION'].decode().strip()!='0.1.1':
         raise ValueError('Unsupported scaffold source version.')
     hashes={name:hashlib.sha256(value).hexdigest() for name,value in sorted(payload.items())}
     fingerprint=hashlib.sha256(''.join(f'{digest}  {name}\n' for name,digest in hashes.items()).encode()).hexdigest()
-    identity={'schemaVersion':1,'name':NAME,'version':'0.1.0','kind':'source','contractsVersion':'1.0.1',
+    identity={'schemaVersion':1,'name':NAME,'version':'0.1.1','kind':'source','contractsVersion':'0.1.1',
               'logicalProtocolVersion':'1.0-scaffold','registerMapVersion':'1.0-reserved',
               'physicalAvailable':False,'source':source,'files':hashes,'sourceFingerprint':fingerprint}
     payload['fpga-artifact.json']=(json.dumps(identity,indent=2,sort_keys=True)+'\n').encode()

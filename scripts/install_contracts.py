@@ -21,7 +21,7 @@ def main(argv=None):
         digest=os.environ.get('NETCIRCUIT_CONTRACTS_WHEEL_SHA256')
         if not url or not digest:
             parser.error('Select an immutable Contracts manifest or exact HTTPS URL/SHA256.')
-        wheel=artifact_directory('fpga-leaf-contracts')/'netcircuit_contracts-1.0.1-py3-none-any.whl'
+        wheel=artifact_directory('fpga-leaf-contracts')/'netcircuit_contracts-0.1.1-py3-none-any.whl'
         wheel.write_bytes(download_artifact(url,digest))
         verify_wheel(wheel,digest)
     runtime=artifact_directory('fpga-leaf-contract-install')
