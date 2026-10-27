@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.build/
+db/
+incremental_db/
+output_files/
+*.sof
+*.pof
+*.jic
+*.qws

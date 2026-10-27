@@ -1,0 +1,19 @@
+{
+  "tag": "2026-10-26",
+  "platforms": {
+    "windows-x64": {
+      "filename": "oss-cad-suite-windows-x64-20261026.tgz",
+      "url": "https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2026-10-26/oss-cad-suite-windows-x64-20261026.tgz",
+      "sha256": "8d0467cbd6d2c8fb41e99d3cd8a727109b8a3f08a9161c33a11ae6e731b998e3",
+      "size": 604483111,
+      "version": "14.0 (devel) (s20260301-713-gf9111a949-dirty)"
+    },
+    "linux-x64": {
+      "filename": "oss-cad-suite-linux-x64-20261026.tgz",
+      "url": "https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2026-10-26/oss-cad-suite-linux-x64-20261026.tgz",
+      "sha256": "c0271052f5688834930c0788b547d26ea2d247eaf1f5a79d79e714bdcc64d4b8",
+      "size": 748708972,
+      "version": "14.0 (devel) (s20260301-713-gf9111a949-dirty)"
+    }
+  }
+}

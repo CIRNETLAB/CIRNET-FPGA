@@ -1,0 +1,3 @@
+# Preserve reviewed migration/source-release bytes on every platform.
+# In particular, do not let core.autocrlf rewrite the two retained DUT modules.
+* -text

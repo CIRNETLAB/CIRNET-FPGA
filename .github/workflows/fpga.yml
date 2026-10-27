@@ -1,0 +1,64 @@
+name: FPGA source and RTL
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  NETCIRCUIT_CONTRACTS_DEV_WHEEL_URL: ${{ vars.NETCIRCUIT_CONTRACTS_DEV_WHEEL_URL }}
+  NETCIRCUIT_CONTRACTS_DEV_WHEEL_SHA256: ${{ vars.NETCIRCUIT_CONTRACTS_DEV_WHEEL_SHA256 }}
+  NETCIRCUIT_CONTRACTS_WHEEL_URL: ${{ vars.NETCIRCUIT_CONTRACTS_WHEEL_URL }}
+  NETCIRCUIT_CONTRACTS_WHEEL_SHA256: ${{ vars.NETCIRCUIT_CONTRACTS_WHEEL_SHA256 }}
+jobs:
+  standalone:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Bootstrap exact independent allocator before diagnostics
+        env:
+          NETCIRCUIT_ARTIFACTS_DIR: ${{ runner.temp }}/fpga-verification
+          NETCIRCUIT_ARTIFACTS_TOKEN: ${{ secrets.NETCIRCUIT_ARTIFACTS_READ_TOKEN }}
+        run: python -B scripts/bootstrap_contract_tools.py
+      - name: Select owned temporary paths
+        run: |
+          python -B - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.artifact_paths import artifact_directory
+          root=artifact_directory('fpga-leaf-ci')
+          with Path(os.environ['GITHUB_ENV']).open('a') as output:
+              for key in ('TEMP','TMP','TMPDIR','PIP_CACHE_DIR'):
+                  output.write(f'{key}={root}\n')
+          PY
+      - name: Install complete hash-locked verification closure and selected Contracts
+        env:
+          NETCIRCUIT_ARTIFACTS_TOKEN: ${{ secrets.NETCIRCUIT_ARTIFACTS_READ_TOKEN }}
+        run: |
+          python -B -m pip download --require-hashes --only-binary=:all: --dest "$NETCIRCUIT_ARTIFACTS_SESSION/wheelhouse" -r requirements-verification.lock
+          python -B -m pip install --no-index --find-links "$NETCIRCUIT_ARTIFACTS_SESSION/wheelhouse" --require-hashes --only-binary=:all: -r requirements-verification.lock
+          python -B scripts/install_contracts.py
+          python -B -m pip check
+      - name: Install pinned official RTL toolchain
+        run: python -B scripts/install_toolchain.py
+      - name: Mandatory parser, both-top compilation and actual safety behavior
+        run: |
+          python -B scripts/check_rtl.py
+          python -B -m pytest -q --basetemp "$NETCIRCUIT_ARTIFACTS_SESSION/pytest" --junitxml "$NETCIRCUIT_ARTIFACTS_SESSION/results.xml"
+      - name: Build exact source artifact twice
+        run: |
+          python -B scripts/build_source.py --output "$NETCIRCUIT_ARTIFACTS_SESSION/netcircuit-fpga-scaffold-0.1.0.tar.gz" --provenance integration/source-provenance.json
+          python -B scripts/build_source.py --output "$NETCIRCUIT_ARTIFACTS_SESSION/rebuilt.tar.gz" --provenance integration/source-provenance.json
+          cmp "$NETCIRCUIT_ARTIFACTS_SESSION/netcircuit-fpga-scaffold-0.1.0.tar.gz" "$NETCIRCUIT_ARTIFACTS_SESSION/rebuilt.tar.gz"
+      - uses: actions/upload-artifact@v4
+        if: always() && env.NETCIRCUIT_ARTIFACTS_SESSION != ''
+        with:
+          name: fpga-source-and-verification
+          path: ${{ env.NETCIRCUIT_ARTIFACTS_SESSION }}/*.tar.gz
+      - name: Clean only this owned session
+        if: always() && env.NETCIRCUIT_ARTIFACTS_SESSION != ''
+        run: node "$NETCIRCUIT_ARTIFACTS_CLI" --cleanup "$NETCIRCUIT_ARTIFACTS_SESSION"
