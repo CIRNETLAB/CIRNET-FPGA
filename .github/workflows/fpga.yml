@@ -34,6 +34,8 @@ jobs:
           with Path(os.environ['GITHUB_ENV']).open('a') as output:
               for key in ('TEMP','TMP','TMPDIR','PIP_CACHE_DIR'):
                   output.write(f'{key}={root}\n')
+              output.write(f'npm_config_cache={root / "npm-cache"}\n')
+              output.write('PYTHONDONTWRITEBYTECODE=1\n')
           PY
       - name: Install complete hash-locked verification closure and selected Contracts
         env:
