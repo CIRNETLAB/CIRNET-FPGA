@@ -13,6 +13,10 @@ from artifact_paths import validate_artifact_directory
 
 ROOT = Path(__file__).resolve().parents[1]
 NAME = 'netcircuit-fpga-scaffold'
+REPOSITORY = 'https://github.com/CIRNETLAB/CIRNET-FPGA.git'
+REPOSITORY_ALIASES = {REPOSITORY, REPOSITORY.removesuffix('.git'),
+                      'https://github.com/TINIHI-Labs/net-Circuit-FPGA.git',
+                      'https://github.com/TINIHI-Labs/net-Circuit-FPGA'}
 SOURCE_NAMES = {'README.md','LICENSE','VERSION','.gitignore','.gitattributes','pytest.ini',
                 'requirements-verification.lock','fpga','tests','scripts','integration','docs','.github'}
 SUFFIXES = {'.md','.py','.mjs','.json','.v','.lock','.yml','.yaml','.ini'}
@@ -65,11 +69,17 @@ def build(output,provenance,root=ROOT):
     for key in ('repository','originalRepository'):
         if not isinstance(source.get(key),str) or not source[key].startswith('https://'):
             raise ValueError('Explicit source repository provenance is required.')
+    if source['repository'] not in REPOSITORY_ALIASES:
+        raise ValueError('Source repository must identify CIRNET-FPGA or its recorded historical name.')
     for key in ('revision','originalRevision'):
         if not re.fullmatch('[0-9a-f]{40}',source.get(key,'')):
             raise ValueError('Explicit source revision provenance is required.')
     if not isinstance(source.get('uncommittedMigration'),bool):
         raise ValueError('Explicit uncommittedMigration provenance is required.')
+    # Migration inputs preserve their historical URLs. New artifact provenance
+    # names this same repository at its current location, without rewriting the
+    # originalRepository/originalRevision or the caller's provenance document.
+    source={**source,'repository':REPOSITORY}
     payload=source_files(Path(root))
     if payload['VERSION'].decode().strip()!='0.1.1':
         raise ValueError('Unsupported scaffold source version.')

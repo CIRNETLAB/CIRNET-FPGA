@@ -1,11 +1,17 @@
-# net-Circuit-FPGA
+# CIRNET-FPGA
+
+Current repository: [CIRNETLAB/CIRNET-FPGA](https://github.com/CIRNETLAB/CIRNET-FPGA).
+Historical `TINIHI-Labs/net-Circuit-FPGA` provenance identifies this same
+repository before its rename. Local checkout directories and technical
+package/module/environment/protocol names retain their existing identities.
 
 Independent Lab-First FPGA source/scaffold **0.1.1**. The portable controller,
 disabled future instrument interface retain their Remote source bytes. The
 original testbench retains every assertion and holds reset through one clock
 edge before release, correcting simulator-dependent declaration initialization.
-Hardware drivers belong to net-Circuit-Hardware; system safety,
-orchestration and integrated acceptance belong to net-Circuit-Remote.
+Hardware drivers belong to [CIRNET-Hardware](https://github.com/CIRNETLAB/CIRNET-Hardware);
+system safety, orchestration and integrated acceptance belong to
+[CIRNET-Remote](https://github.com/CIRNETLAB/CIRNET-Remote).
 
 There is no board image, Python runtime package, transport decoder, switching
 matrix, electrical protection, topology scanner, ADC/DAC, SDRAM or CDC
@@ -57,9 +63,15 @@ from that inventory. No source sibling imports or canonical schema copies are
 required. Fresh exports must carry explicit provenance. The initial
 [provenance](integration/source-provenance.json) honestly records the uncommitted
 migration against both preserved baseline revisions.
+New builds record `https://github.com/CIRNETLAB/CIRNET-FPGA.git` as the current
+source repository while preserving the input's original repository/revision.
+The historical input file is never rewritten. Existing immutable
+[v0.1.1](https://github.com/CIRNETLAB/CIRNET-FPGA/releases/tag/v0.1.1) artifacts
+retain their old source/provenance and bytes; compare a fresh committed build
+before selecting it, rather than treating the version number as a byte identity.
 
 Inspect external diagnostics before cleanup using the installed allocator's
 guarded session cleanup. Preserve LICENSE, original RTL/testbench, frozen source,
 historical evidence and Git ancestry. No board programming or physical rollback
 is claimed. Canonical system authority remains Lab-First v3.1 in
-[net-Circuit-Remote architecture](https://github.com/net-Circuit-Remote/net-Circuit-Remote/blob/master/docs/ARCHITECTURE.md).
+[CIRNET-Remote architecture](https://github.com/CIRNETLAB/CIRNET-Remote/blob/master/docs/ARCHITECTURE.md).

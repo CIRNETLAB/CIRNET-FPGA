@@ -1,6 +1,6 @@
 # Lab-First FPGA workspace
 
-Canonical authority: [Remote Lab-First architecture](https://github.com/net-Circuit-Remote/net-Circuit-Remote/blob/master/docs/ARCHITECTURE.md). Mini PC host boundary is FpgaTransport (serial/USB-SPI, future USB3/Ethernet), with transport-independent protocol.
+Canonical authority: [Remote Lab-First architecture](https://github.com/CIRNETLAB/CIRNET-Remote/blob/master/docs/ARCHITECTURE.md). Mini PC host boundary is FpgaTransport (serial/USB-SPI, future USB3/Ethernet), with transport-independent protocol.
 
 EP4CE6E22C8N prototype has no external SDRAM. R7 aligns compile-safe reset/safe-state, protocol/control, topology scan, protected drive, routing, experiment clock and fault interlock.
 

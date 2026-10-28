@@ -22,11 +22,26 @@ def test_source_archive_rebuild_has_same_bytes_and_rejects_unsafe_input(tmp_path
     script = ROOT/'scripts/build_source.py'
     assert script.is_file(), 'versioned deterministic source builder is missing'
     provenance = ROOT/'integration/source-provenance.json'
+    historical_provenance = provenance.read_bytes()
     first,second = tmp_path/'first.tar.gz',tmp_path/'second.tar.gz'
     for path in (first,second):
         result = run_script('build_source.py','--output',path,'--provenance',provenance)
         assert result.returncode == 0, result.stdout+result.stderr
     assert first.read_bytes() == second.read_bytes()
+    with tarfile.open(first, 'r:gz') as archive:
+        source = json.loads(archive.extractfile('fpga-artifact.json').read())['source']
+    assert source['repository'] == 'https://github.com/CIRNETLAB/CIRNET-FPGA.git'
+    historical = json.loads(historical_provenance)
+    assert source['originalRepository'] == historical['originalRepository']
+    assert source['originalRevision'] == historical['originalRevision']
+    assert provenance.read_bytes() == historical_provenance
+    unrelated = tmp_path/'unrelated-provenance.json'
+    unrelated.write_text(json.dumps({**historical, 'repository': 'https://github.com/unrelated/other.git'}))
+    rejected = tmp_path/'unrelated.tar.gz'
+    result = run_script('build_source.py', '--output', rejected, '--provenance', unrelated)
+    assert result.returncode != 0, 'An unrelated repository must never be relabelled as CIRNET-FPGA'
+    assert 'repository' in result.stderr.lower()
+    assert not rejected.exists()
     result = run_script('build_source.py','--output',ROOT/'forbidden.tar.gz','--provenance',provenance)
     assert result.returncode != 0
     assert not (ROOT/'forbidden.tar.gz').exists()
